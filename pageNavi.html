@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>  
+    <title>Blog Post Editor</title>    
+	<style>
+		#pagenavi_container{
+			text-align: center;
+			font-family : arial;
+			font-size: 12px;
+		} 
+		#pagenavi_parent{
+			width : 330px;
+			height: 30px; 
+			position: relative;
+			display: inline-block;  
+		}
+		 
+		
+		.pagenavi_rf{
+			height: 30px;
+			min-width: 30px;
+			display: inline-block;
+			vertical-align: top;
+			cursor: pointer;
+			line-height: 30px; 
+			text-align: center;
+			color: #fff;
+			padding-left: 3px;
+			padding-right: 3px;
+		}
+		.pagenavi_black{
+			border-radius : 3px;			
+			background: #7d7e7d; /* Old browsers */
+			background: -moz-linear-gradient(top, #7d7e7d 0%, #0e0e0e 100%); /* FF3.6+ */
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7d7e7d), color-stop(100%,#0e0e0e)); /* Chrome,Safari4+ */
+			background: -webkit-linear-gradient(top, #7d7e7d 0%,#0e0e0e 100%); /* Chrome10+,Safari5.1+ */
+			background: -o-linear-gradient(top, #7d7e7d 0%,#0e0e0e 100%); /* Opera 11.10+ */
+			background: -ms-linear-gradient(top, #7d7e7d 0%,#0e0e0e 100%); /* IE10+ */
+			background: linear-gradient(top, #7d7e7d 0%,#0e0e0e 100%); /* W3C */
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=0 ); /* IE6-9 */
+		}
+		.pagenavi_yellow{
+			color: #000 !important; 
+			border-radius : 3px;	
+			background: #ffd65e; /* Old browsers */
+			background: -moz-linear-gradient(top, #ffd65e 0%, #febf04 100%); /* FF3.6+ */
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffd65e), color-stop(100%,#febf04)); /* Chrome,Safari4+ */
+			background: -webkit-linear-gradient(top, #ffd65e 0%,#febf04 100%); /* Chrome10+,Safari5.1+ */
+			background: -o-linear-gradient(top, #ffd65e 0%,#febf04 100%); /* Opera 11.10+ */
+			background: -ms-linear-gradient(top, #ffd65e 0%,#febf04 100%); /* IE10+ */
+			background: linear-gradient(top, #ffd65e 0%,#febf04 100%); /* W3C */
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffd65e', endColorstr='#febf04',GradientType=0 ); /* IE6-9 */
+		}
+		.pagenavi_red{
+			background: #ff3019; /* Old browsers */
+			background: -moz-linear-gradient(top, #ff3019 0%, #cf0404 100%); /* FF3.6+ */
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff3019), color-stop(100%,#cf0404)); /* Chrome,Safari4+ */
+			background: -webkit-linear-gradient(top, #ff3019 0%,#cf0404 100%); /* Chrome10+,Safari5.1+ */
+			background: -o-linear-gradient(top, #ff3019 0%,#cf0404 100%); /* Opera 11.10+ */
+			background: -ms-linear-gradient(top, #ff3019 0%,#cf0404 100%); /* IE10+ */
+			background: linear-gradient(top, #ff3019 0%,#cf0404 100%); /* W3C */
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3019', endColorstr='#cf0404',GradientType=0 ); /* IE6-9 */
+			border-radius : 3px;
+		}
+		
+		.pagenav_number{  
+			display: inline-block;
+			height: 30px; 
+			min-width: 30px;
+			padding-left: 3px;
+			padding-right: 3px;
+			cursor: pointer;
+			line-height: 30px;
+			vertical-align: top;
+			text-align: center;
+			color: #fff;
+			margin-right: 2px;
+			}
+	</style>
+	 
+  </head>
+ <body>    
+<div id="pagenavi_container" onselectstart="return false;">
+	<div id="pagenavi_min" class="pagenavi_black pagenavi_rf">-</div>
+	<div id="pagenavi_parent"  class="pagenavi_black"> 
+	</div> 
+	<div id="pagenavi_plus" class="pagenavi_black pagenavi_rf">+</div> 
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" ></script>
+<script>
+  var pagenavi = function(startIn,maxNumb,clickfunc){
+	var parent = $('#pagenavi_parent'); 
+	var pagenavi_min = $('#pagenavi_min');
+	var pagenavi_plus = $('#pagenavi_plus');
+	var jumlahButton = 0; 
+	
+	var appearNumber = function(start){ 
+		parent.html('');
+		 
+		for(var i=start;i<=maxNumb;i++){
+			var cssClass = (startIn == i)? 'pagenavi_yellow':'pagenavi_red';
+			var numButton = $('<div class="pagenav_number '+cssClass+'">'+i+'</div>'); 
+			parent.append(numButton);  
+			
+			var position = numButton.position();
+			if((position.top + 2) > parent.height()){ 
+				numButton.remove();
+				jumlahButton = parent.find('.pagenav_number').length;
+				break;
+			}
+			
+		}; 
+		
+		parent.find('.pagenav_number').click(function(){
+			var curNumber = $(this).html();
+			if(typeof clickfunc =='function'){
+				clickfunc(Number(curNumber));
+			}
+			
+		});
+		
+	};	
+	var t; 
+	var repeatPlus = function (repeatTime) {
+        clickNext();
+        t = setTimeout(function(){
+				repeatPlus(100);
+			}, repeatTime);  
+    };
+	var clickNext = function(){
+		var firstNumber = parent.find('.pagenav_number').first().html();
+		var nextNumb = Number(firstNumber) + jumlahButton;
+			nextNumb = (nextNumb > maxNumb)? maxNumb - 1:nextNumb;
+		appearNumber(nextNumb); 
+	};
+	
+	pagenavi_plus.bind('mousedown',function(){
+				repeatPlus(1000);
+			});
+	pagenavi_plus.bind('mouseup mouseout',function(){
+		clearTimeout(t);
+	});
+	
+	
+	var tm;
+	var repeatMin = function (repeatTime) {
+        clickMin();
+        tm = setTimeout(function(){
+				repeatMin(100);
+			}, repeatTime);  
+    };
+	
+	var clickMin = function(){
+		var firstNumb = parent.find('.pagenav_number').first().html(); 			
+		var minNumb = Number(firstNumb) - jumlahButton;
+			minNumb = (minNumb < 1)? 1:minNumb; 
+			appearNumber(minNumb); 
+	};
+	
+	pagenavi_min.bind('mousedown',function(){		
+		repeatMin(1000);
+	});
+	pagenavi_min.bind('mouseup mouseout',function(){		
+		clearTimeout(tm);
+	}); 
+	var startApear =  startIn - 3;
+		startApear = (startApear <= 0)? 0:startApear;
+	appearNumber(startApear);
+ }
+ 
+ $(document).ready(function(){
+ 
+ pagenavi(10,1000,function(s){
+	window.location.href = "#" + s;
+ });
+ });
+</script>
+ </body>
+</html>
